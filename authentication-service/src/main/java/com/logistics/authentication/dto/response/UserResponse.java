@@ -1,4 +1,4 @@
-package com.logistics.authentication.dto;
+package com.logistics.authentication.dto.response;
 
 import com.logistics.authentication.entity.Role;
 import lombok.Builder;

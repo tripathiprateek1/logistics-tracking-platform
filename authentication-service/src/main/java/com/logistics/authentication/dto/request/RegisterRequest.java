@@ -1,4 +1,4 @@
-package com.logistics.authentication.dto;
+package com.logistics.authentication.dto.request;
 
 import com.logistics.authentication.entity.Role;
 import jakarta.validation.constraints.Email;

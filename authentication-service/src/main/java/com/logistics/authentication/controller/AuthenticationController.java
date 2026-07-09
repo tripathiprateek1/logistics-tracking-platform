@@ -1,7 +1,9 @@
 package com.logistics.authentication.controller;
 
-import com.logistics.authentication.dto.RegisterRequest;
-import com.logistics.authentication.dto.UserResponse;
+import com.logistics.authentication.dto.request.LoginRequest;
+import com.logistics.authentication.dto.request.RegisterRequest;
+import com.logistics.authentication.dto.response.LoginResponse;
+import com.logistics.authentication.dto.response.UserResponse;
 import com.logistics.authentication.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +25,12 @@ public class AuthenticationController {
         UserResponse response = authenticationService.register(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 }
