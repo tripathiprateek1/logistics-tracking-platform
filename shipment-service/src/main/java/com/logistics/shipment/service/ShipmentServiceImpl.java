@@ -5,9 +5,12 @@ import com.logistics.shipment.dto.request.UpdateShipmentStatusRequest;
 import com.logistics.shipment.dto.response.ShipmentResponse;
 import com.logistics.shipment.entity.Shipment;
 import com.logistics.shipment.entity.ShipmentStatus;
+import com.logistics.shipment.exception.ResourceNotFoundException;
 import com.logistics.shipment.repository.ShipmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +49,9 @@ public class ShipmentServiceImpl  implements ShipmentService {
         Shipment shipment = shipmentRepository
                 .findByTrackingNumber(trackingNumber)
                 .orElseThrow(() ->
-                        new RuntimeException("Shipment not found with tracking number: " + trackingNumber));
+                        new ResourceNotFoundException(
+                                "Shipment not found with tracking number: "
+                                        + trackingNumber));
 
         return ShipmentResponse.builder()
                 .trackingNumber(shipment.getTrackingNumber())
@@ -65,7 +70,7 @@ public class ShipmentServiceImpl  implements ShipmentService {
         Shipment shipment = shipmentRepository
                 .findByTrackingNumber(trackingNumber)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Shipment not found with tracking number: "
                                         + trackingNumber));
 
@@ -85,7 +90,28 @@ public class ShipmentServiceImpl  implements ShipmentService {
                 .build();
     }
 
+    @Override
+    public List<ShipmentResponse> getAllShipments() {
+        return shipmentRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
     private String generateTrackingNumber() {
         return "TRK" + System.currentTimeMillis();
+    }
+    private ShipmentResponse mapToResponse(Shipment shipment) {
+
+        return ShipmentResponse.builder()
+                .trackingNumber(shipment.getTrackingNumber())
+                .senderName(shipment.getSenderName())
+                .receiverName(shipment.getReceiverName())
+                .origin(shipment.getOrigin())
+                .destination(shipment.getDestination())
+                .status(shipment.getStatus())
+                .createdAt(shipment.getCreatedAt())
+                .updatedAt(shipment.getUpdatedAt())
+                .build();
     }
 }

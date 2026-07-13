@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/shipments")
 @RequiredArgsConstructor
@@ -39,5 +41,11 @@ public class ShipmentController {
         return shipmentService.updateShipmentStatus(
                 trackingNumber,
                 request);
+    }
+
+    @GetMapping
+    public List<ShipmentResponse> getAllShipments() {
+
+        return shipmentService.getAllShipments();
     }
 }
