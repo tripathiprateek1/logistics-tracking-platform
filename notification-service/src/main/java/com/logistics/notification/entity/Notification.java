@@ -6,12 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "notifications")
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Notification {
 
     @Id
@@ -19,7 +19,17 @@ public class Notification {
     private Long id;
 
     @Column(nullable = false)
+    private String recipientEmail;
+
+    @Column(nullable = false)
+    private String subject;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private NotificationStatus status;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -30,12 +40,11 @@ public class Notification {
     public void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        status = NotificationStatus.PENDING;
     }
 
     @PreUpdate
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }
-
